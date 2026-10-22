@@ -1,16 +1,17 @@
 
 // Project: Simon
 // Author : NPone29
-// Date   : 08.10.2026
-// Version: 1.0
+// Date   : 22.10.2026
+// Version: 1.1
 // Description: This code allows you to play the game Simon.
 
-
+// Importing the necessary modules
 #include <Bounce2.h>
 #include "variables.h"
 
 Bounce valButton[4];
 
+// Definition of ode to joy melody
 const int ode_to_joy_melody[] PROGMEM = {
   NOTE_E4, 8, 4, NOTE_E4, 8, 4,  NOTE_F4, 8, 2,  NOTE_G4, 8, 5,
   NOTE_G4, 8, 5,  NOTE_F4, 8, 2, NOTE_E4, 8, 4, NOTE_D4, 8, 3,
@@ -18,93 +19,122 @@ const int ode_to_joy_melody[] PROGMEM = {
   NOTE_E4, 4, 4, NOTE_D4, 8, 3,  NOTE_D4, 4, 3
 };
 
+// Definition of the start melody
 const int start_melody[] PROGMEM = {
   NOTE_C4, 8, 2, NOTE_D4, 8, 3, NOTE_E4, 8, 4, NOTE_D4, 8, 3, NOTE_C4, 8, 2,
   NOTE_G4, 8, 5, NOTE_C4, 8, 2 
 };
 
 void setup() {
+
+  // Set the LEDs to OUTPUT pinmode
   for(int i=2;i<=5;i++) pinMode(i,OUTPUT);
 
-  for(int i = 0; i <= 3;i++) {
-    valButton[i] = Bounce();
-    valButton[i].attach(A2 + i, INPUT_PULLUP);
-    valButton[i].interval(25);
+  // Set the buttons as a bounce one in the button array.
+  for(int button = 0; button <= 3;button++) {
+    valButton[button] = Bounce();
+    valButton[button].attach(A2 + button, INPUT_PULLUP);
+    valButton[button].interval(25);
   }
 }
 
 void loop() {
 
+  // Update the first button status
   valButton[0].update();
   
-
+  // Wait for the user to press button 1
   if(valButton[0].fell()) {
 
+    // loop that start the simon game initiation
     while(true) {
 
+      // Important variable definition
       int currentCheckIndex = 0;
       int randomNum = -1;
       int combinations[100];
       int nbElements = -1;
       bool wrong_combination = false;
 
-      bool playing = true;
+      bool isShowingSequence = true;
 
+      // Play the start melody and wait 1 sec
       play_melody("start");
       delay(100);
 
+      // Loop that start the game
       while(true) {
 
-        for(int i=0;i< 4;i++) {
-          valButton[i].update();
+        // Update the status of all buttons
+        for(int button=0; button< 4; button++) {
+          valButton[button].update();
         }
 
-        if(playing) {
+        // If the variable is true, then
+        if(isShowingSequence) {
 
+          // Repeat all previous sequences
           for(int i = 0; i<=nbElements;i++) {
             int currentNote = combinations[i];
             show_note(currentNote);
             delay(100);
           }
 
+          // Add a new sequence in the list
           randomNum = random(0, 4);
           combinations[nbElements + 1] = randomNum;
           nbElements++;
           show_note(randomNum);
 
-          playing = false;
+          // Set the variable to false to allow the user to play.
+          isShowingSequence = false;
         } else {
 
-          int correct_response = combinations[currentCheckIndex];
+          // the correct combination
+          int correct_combination = combinations[currentCheckIndex];
 
+          // If the wrong combination was pressed
           if(wrong_combination) {
-            play_lose_sound();
-            wrong_combination = false;
+            // Play the lose sound with all leds
+            endGame();
+            // The break allows you to stop the current game and start over.
             break;
           }
 
-          for (int i = 0; i < 4; i++) {
-            if (valButton[i].fell()) { 
-              show_note(i);
+          // Loop for the 4 buttons
+          for (int button = 0; button < 4; button++) {
 
-              if (i != correct_response) {
+            // If a button is pressed
+            if (valButton[button].fell()) { 
+              show_note(button);
+
+              // If it is not the correct combination
+              if (button != correct_combination) {
+                // Set wrong_combination to true
                 wrong_combination = true;
+                // Break the loop for the buttons
                 break;
               }
 
+              // Add 1 to the currentCheckIndex
               currentCheckIndex++;
 
+              // If all combinations have been made, then
               if(currentCheckIndex >= nbElements + 1) {
 
-                if(nbElements == 2) {
+                // If the number of combinations reaches 31, the user has won and the melody of "Ode to Joy" plays.
+                if(nbElements + 1 == 3) {
                   delay(100);
                   play_melody("ode_to_joy");
                   delay(500);
                 }
 
+                // Let's say the future combination we're looking for is 0
                 currentCheckIndex = 0;
-                playing = true; 
+                // return to the showing sequence
+                isShowingSequence = true; 
                 delay(100);
+                // break the buttons variable
                 break;
               }
             }
@@ -115,24 +145,32 @@ void loop() {
   }
 }
 
+// Function that turns on the LED and plays its sound.
 void show_note(int combination) {
 
-  int game_notes[5] = { NOTE_MI4, NOTE_DO4, NOTE_LA3, NOTE_MI3 };
+  // Defintion of the musical notes for the LEDs
+  int game_notes[4] = { NOTE_MI4, NOTE_DO4, NOTE_LA3, NOTE_MI3 };
+  // Definition of the ledPin
   int ledPin = combination + 2;
 
+  // Start turning on the LEDs and trigger the sound.
   digitalWrite(ledPin, HIGH);
   tone(BUZZER_PIN, game_notes[combination]);
+  // After 0.4 seconds, turn off the LED and stop the sound
   delay(400);
   digitalWrite(ledPin, LOW);
   noTone(BUZZER_PIN);
 }
 
+// Function that allows for playing the opening melody and "Ode to Joy"
 void play_melody(String music) {
 
+  // Definition of all neccessary variables
   const int* selectedMelody = NULL;
   int totalNotes = 0;
   int tempo = 80;
 
+  // Change the melody, note, and tempo variables according to the music
   if (music == "start") {
     selectedMelody = start_melody;
     totalNotes = sizeof(start_melody) / sizeof(start_melody[0]) / 3;
@@ -143,14 +181,20 @@ void play_melody(String music) {
     totalNotes = sizeof(ode_to_joy_melody) / sizeof(ode_to_joy_melody[0]) / 3;
   }
 
+  // If the melody is invalide, then return;
   if (selectedMelody == NULL) return;
 
+  // Calculate the duration of a whole note in ms based on tempo
   int wholenote = (60000 * 4) / tempo;
   int divider = 0, noteDuration = 0;
   
+  // Loop through the melody: each note uses 3 consecutive values (Frequency, Duration/Divider, LED Pin)
   for (int thisNote = 0; thisNote < totalNotes * 3; thisNote = thisNote + 3) {
 
+      // Read the duration divider from Flash memory (PROGMEM)
       divider = pgm_read_word_near(selectedMelody + thisNote + 1);
+
+      // Depending on the value of divider, assign a different duration to the note.
       if (divider > 0) {
        
         noteDuration = wholenote / divider;
@@ -160,21 +204,46 @@ void play_melody(String music) {
         noteDuration *= 1.5;
       }
 
+      // Retrieve the LED pin associated with this note from Flash memory
       int ledPin = pgm_read_word_near(selectedMelody + thisNote + 2);
       digitalWrite(ledPin, HIGH); 
 
+      // Play the frequency from Flash memory for 90% of its duration to articulate the notes
       tone(BUZZER_PIN, pgm_read_word_near(selectedMelody + thisNote), noteDuration * 0.9);
+      // Wait for the note duration to complete
       delay(noteDuration);
+      // Turn off the LED and stop the sound
       digitalWrite(ledPin, LOW);
       noTone(BUZZER_PIN);
   }
 }
 
-void play_lose_sound() {
+// Function that turns on all the LEDs and trigger the end-of-game sound.
+void endGame() {
+  // Loop that executes 4 times
   for(int i = 0; i <=3;i++) {
+
+    //Loop that turn on the 4 LEDs
+    for(int ledPin = 2; ledPin <=5; ledPin++) {
+      digitalWrite(ledPin, HIGH);
+    }
+
+    // trigger the end-of-game sound
     tone(BUZZER_PIN, NOTE_DO2);
-    delay(500);
+
+    //After 0.25 seconds, turn off all LEDs and stop the end-of-game sound.
+    delay(250);
+
+    // Loop that turn off the 4 LEDs
+    for(int ledPin = 2; ledPin <=5; ledPin++) {
+      digitalWrite(ledPin, LOW);
+    }
+
+    // Stop the end-of-game sound
     noTone(BUZZER_PIN);
+
+    // wait the next sequence or the end of the loop
+    delay(250);
   }
 }
 
