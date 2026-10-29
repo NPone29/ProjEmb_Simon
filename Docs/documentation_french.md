@@ -7,7 +7,7 @@ Le jeu Simon est un jeu de mémoire où le joueur doit reproduire des séquences
 
 Le jeu commence par une seule séquence  et à chaque fois que l'utilisateur réussit, la séquence suivante est ajoutée, ce qui rend le jeu progressivement plus complexe à mesure que le joueur réussit à reproduire les séquences.
 
-![Image de jeu Simon](images/Simon_Electronic_Game.jpg)
+![Image de jeu Simon](Images/Simon_Electronic_Game.jpg)
 
 ## 2. Schéma électrique
 Le shield veroboard relie quatre LEDs, quatre boutons et un buzzer à l'Arduino Uno. Tous les composants partagent la masse (GND) de l'Arduino.
