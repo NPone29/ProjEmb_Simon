@@ -1,7 +1,7 @@
 // Project: Simon
 // Author : NPone29
-// Date   : 28.10.2026
-// Version: 1.2
+// Date   : 29.10.2026
+// Version: 1.3
 // Description: This code allows you to play the game Simon.
 
 // Importing the necessary modules
@@ -261,16 +261,27 @@ void defeat() {
   }
 }
 
+// Function that play a LEDs spectacle and play the "Ode to Joy" melody
 void victory() {
+  // Loop that executes 3 times
   for (int tour = 0; tour < 3; tour++) {
+    // Loop that turn on the 4 LEDs one by one
     for (int led = FIRST_LED_PIN; led <= LAST_LED_PIN; led++) {
-      digitalWrite(led, HIGH); delay(80); digitalWrite(led, LOW);
+      digitalWrite(led, HIGH); 
+      delay(80); 
+      digitalWrite(led, LOW);
     }
   }
+
+  // Play the "Ode to Joy" melody
   play_melody("ode_to_joy");
+
+  // Loop that executes 3 times
   for (int i = 0; i < 3; i++) {
+    // Loop that turn on the 4 LEDs
     for (int led = FIRST_LED_PIN; led <= LAST_LED_PIN; led++) digitalWrite(led, HIGH);
     delay(300);
+    // Loop that turn off the 4 LEDs
     for (int led = FIRST_LED_PIN; led <= LAST_LED_PIN; led++) digitalWrite(led, LOW);
     delay(300);
   }
