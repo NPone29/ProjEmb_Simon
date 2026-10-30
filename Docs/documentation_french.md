@@ -3,11 +3,13 @@
 ## 1. Introduction
 Ce projet consiste à réaliser le jeu Simon sur un Arduino Uno, à l'aide d'un shield veroboard monté et soudé, puis le programmer en C++ (fichier `ProjEmb_Simon.ino`)
 
-Le jeu Simon est un jeu de mémoire où le joueur doit reproduire des séquences de couleurs en appuyant sur des boutons correspondants. 
+Le jeu Simon est un jeu de mémoire où le joueur doit reproduire une séquence de couleurs en appuyant sur les boutons correspondants. Chaque couleur est associée à une LED et à un son spécifique.
 
-Le jeu commence par une seule séquence et à chaque fois que l'utilisateur réussit, la séquence suivante est ajoutée, ce qui rend le jeu progressivement plus complexe à mesure que le joueur réussit à reproduire les séquences.
+Le jeu commence par un seul code et à chaque fois que l'utilisateur réussit, le code suivant est ajoutée, ce qui rend le jeu progressivement plus complexe à mesure que le joueur réussit à reproduire les codes.
 
 ![Image de jeu Simon](Images/Simon_Electronic_Game.jpg)
+
+<div style="page-break-after: always;"></div>
 
 ## 2. Schéma électrique
 Le shield veroboard relie quatre LEDs, quatre boutons et un buzzer à l'Arduino Uno. Tous les composants partagent la masse (GND) de l'Arduino.
@@ -31,14 +33,14 @@ Le shield veroboard relie quatre LEDs, quatre boutons et un buzzer à l'Arduino 
 
 **Buzzer**: Le buzzer est relié à la broche D6 et à la masse. Il produit le son associé à chaque LED.
 
-**Broche A0**: La broche A0 est utilisée pour générer un bruit aléatoire, qui sert à créer la séquence de couleurs du jeu.
-
-
+**Broche A0**: La broche A0 est utilisée pour générer un nombre aléatoire grâce au bruit électrique lu sur cette broche. Cela permet de créer des séquences de couleurs différentes à chaque partie.
 
 ![Schéma électrique](Images/schema_electrique.png)
 
 ### 2.1 Schéma d'implantation
 ![Schéma d'implantation](Images/schema_implantation.png)
+
+<div style="page-break-after: always;"></div>
 
 ## 3. Stratégie de réalisation
 Pour créer le jeu, j'ai découpé le programme en deux fichiers différents :
@@ -51,8 +53,8 @@ J'ai aussi utilisé pas mal de fonctions pour rendre le code plus lisible et pou
 | Fonction | Rôle |
 |----------|------|
 | `void setup()` | Initialise les broches et les variables du jeu. |
-| `void loop()` | Contient les boucles principales du jeu, qui gère les séquences et les entrées utilisateur. |
-| `void show_note(combination)` | Affiche la séquence de couleurs et joue les sons associés. |
+| `void loop()` | Contient les boucles principales du jeu, qui gère la séquence et les entrées utilisateur. |
+| `void show_note(combination)` | Allume une LED et joue la note associée selon le code. |
 | `void play_melody(music)` | Joue soit la mélodie de début, soit celle de victoire. (Hymne à la joie) |
 | `void defeat()` | Joue le son de défaite et fait clignoter les leds 4 fois. |
 | `void victory()` | Joue un spectacle de lumière et la mélodie de victoire. |
@@ -62,10 +64,10 @@ J'ai aussi utilisé pas mal de fonctions pour rendre le code plus lisible et pou
 - **Mélodies en mémoire Flash(PROGMEM)**. L'Arduino Uno n'a que 2 Ko de RAM. Les mélodies sont donc stockées en Flash et lues avec pgm_read_word_near(). 
 
     *Veuillez noter que cette stratégie et ma fonction `play_melody` ce sont inspirées de [cette page github](https://github.com/robsoncouto/arduino-songs/blob/master/furelise/furelise.ino)*
-- **Séquence aléatoire**. La séquence de couleurs est générée aléatoirement grâce au bruit lu sur la broche A0 (`randomSeed(analogRead(A0))`).
-- **Deux victoires possibles**. Le jeu contient une victoire normale après 31 séquences réussies (l'utilisateur continue de jouer) et une victoire spéciale après avoir réussi le nombre maximum de séquences (maximum qui est défini par la variable `MAX_COMBINATIONS` dans le fichier `variables.h`). 
+- **Code aléatoire**. Le code de couleurs est générée aléatoirement grâce au bruit lu sur la broche A0 (`randomSeed(analogRead(A0))`).
+- **Deux victoires possibles**. Le jeu contient une victoire normale après 31 codes réussies (l'utilisateur continue de jouer) et une victoire spéciale après avoir réussi le nombre maximum de codes (maximum qui est défini par la variable `MAX_COMBINATIONS` dans le fichier `variables.h`). 
 
-    Cette deuxième victoire est pour éviter le crash si l'utilisateur dépasse le nombre maximum de séquences du tableau `combinations[]`.
+    Cette deuxième victoire est pour éviter le crash si l'utilisateur dépasse le nombre maximum de codes du tableau `combinations[]`.
 
 ## 4. Diagramme de flux
 ![Diagramme de flux](Images/Simon_diagramme_flux.png)
@@ -75,11 +77,11 @@ Ce projet m'a permis de mettre en pratique mes connaissances en programmation C+
 
 Créer la veroboard était vraiment sympa vu que nous l'avons fait de zéro. Cela m’a permis d’appliquer ce que je savais en soudure et en électronique. Même si j'ai dû faire un peu de debug à cause d'erreurs de soudure.
 
-J'ai réussi à atteindre tous les objectifs demandés dans le cahier des charges. J'ai même ajouté une deuxième victoire pour éviter le crash du programme si l'utilisateur dépasse le nombre maximum de séquences.
+J'ai réussi à atteindre tous les objectifs demandés dans le cahier des charges. J'ai même ajouté une deuxième victoire pour éviter le crash du programme si l'utilisateur dépasse le nombre maximum de codes.
 
 Je n'ai pas rajouter d'autres fonctionnalités dû à un manque de temps mais j'aurais aimé rajouter ces fonctionnalités :
 
-1. Ajouter **une accélération de la séquence** à chaque fois que l'utilisateur réussit une séquence.
+1. Ajouter **une accélération de la séquence** à chaque fois que l'utilisateur réussit un code.
 2. Ajouter **un temps limite** pour répondre, comme dans le vrai jeu Simon.
 
 Ces fonctionnalités auraient rendu le jeu plus difficile et plus intéressant. Mais je suis satisfait du résultat final et je suis fier de ce que j'ai accompli.

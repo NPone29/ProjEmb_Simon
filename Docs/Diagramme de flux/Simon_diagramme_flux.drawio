@@ -1,6 +1,6 @@
 <mxfile host="Electron">
   <diagram name="Page-1" id="A4cCztj3_cDDdylaF5BB">
-    <mxGraphModel dx="853" dy="693" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="1329" dy="1071" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -121,7 +121,7 @@
             <mxPoint x="1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ch7qdZ4i0aKf1x0CDplE-25" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Séquence maximum atteinte ?" vertex="1">
+        <mxCell id="ch7qdZ4i0aKf1x0CDplE-25" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Code maximum atteint ?" vertex="1">
           <mxGeometry height="100" width="225" x="127.5" y="720" as="geometry" />
         </mxCell>
         <mxCell id="ch7qdZ4i0aKf1x0CDplE-26" edge="1" parent="1" source="ch7qdZ4i0aKf1x0CDplE-19" style="endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ch7qdZ4i0aKf1x0CDplE-25" value="">
@@ -170,7 +170,7 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="ch7qdZ4i0aKf1x0CDplE-34" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Séquence 31 atteinte ?" vertex="1">
+        <mxCell id="ch7qdZ4i0aKf1x0CDplE-34" parent="1" style="rhombus;whiteSpace=wrap;html=1;shapeInside=1;" value="Code 31 atteint ?" vertex="1">
           <mxGeometry height="100" width="190.63" x="144.68" y="870" as="geometry" />
         </mxCell>
         <mxCell id="ch7qdZ4i0aKf1x0CDplE-36" edge="1" parent="1" source="ch7qdZ4i0aKf1x0CDplE-34" style="curved=1;curveGeometry=1;endArrow=classic;html=1;rounded=0;defaultLabelBackgroundColor=page;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="ch7qdZ4i0aKf1x0CDplE-9" value="">
